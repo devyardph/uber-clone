@@ -3,39 +3,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
              xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="False"
+             Shell.NavBarIsVisible="False"
              x:Class="UberClone.Mobile.Views.DriverHomePage"
              x:DataType="vm:DriverHomeViewModel"
              Title="{Binding Title}">
+
     <Grid RowDefinitions="*,Auto">
         <maps:GoogleMap Grid.Row="0"
+                        Grid.RowSpan="2"
                         Center="{Binding CurrentLocation}"
                         Zoom="14"/>
 
-        <Border Grid.Row="1" Padding="20" BackgroundColor="{StaticResource Surface}">
-            <VerticalStackLayout Spacing="12">
-                <Label Text="{Binding StatusText}" FontSize="18" FontAttributes="Bold"/>
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource Surface}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20,20,0,0"
+                MaximumHeightRequest="{OnIdiom Default=520, Phone=480, Tablet=600}">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.15" Radius="12" Offset="0,-3"/>
+            </Border.Shadow>
 
-                <Button Text="{Binding IsOnline, Converter={StaticResource OnlineLabel}}"
-                        Command="{Binding ToggleOnlineCommand}"/>
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Style="{StaticResource FormContainer}"
+                                     Spacing="{StaticResource GapMd}"
+                                     Padding="{StaticResource PagePaddingHorizontal},16,{StaticResource PagePaddingHorizontal},{OnPlatform Default=16, iOS=28, Android=16}">
 
-                <!-- Incoming ride card -->
-                <Border IsVisible="{Binding IncomingRide, Converter={StaticResource NotNull}}"
-                        StrokeShape="RoundRectangle 12" Stroke="#10B981" StrokeThickness="2"
-                        Padding="14">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="🚖 New trip request" FontAttributes="Bold"/>
-                        <Label Text="{Binding IncomingRide.PickupAddress, StringFormat='Pickup: {0}'}"/>
-                        <Label Text="{Binding IncomingRide.DropoffAddress, StringFormat='Dropoff: {0}'}"/>
-                        <Label Text="{Binding IncomingRide.Fare.Amount, StringFormat='Fare: ${0:F2}'}"/>
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                            <Button Grid.Column="0" Text="Decline" Command="{Binding DeclineCommand}"
-                                    BackgroundColor="#F3F4F6" TextColor="{StaticResource OnSurface}"/>
-                            <Button Grid.Column="1" Text="Accept" Command="{Binding AcceptRideCommand}"
-                                    BackgroundColor="{StaticResource Accent}"/>
-                        </Grid>
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
+                    <BoxView Color="{StaticResource Hairline}"
+                             HeightRequest="4" WidthRequest="40"
+                             CornerRadius="2"
+                             HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding StatusText}" FontSize="18" FontAttributes="Bold"/>
+
+                    <Button Text="{Binding IsOnline, Converter={StaticResource OnlineLabel}}"
+                            Command="{Binding ToggleOnlineCommand}"/>
+
+                    <!-- Incoming ride card -->
+                    <Border IsVisible="{Binding IncomingRide, Converter={StaticResource NotNull}}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="#10B981"
+                            StrokeThickness="2"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="{StaticResource GapSm}">
+                            <Label Text="🚖 New trip request" FontAttributes="Bold"/>
+                            <Label Text="{Binding IncomingRide.PickupAddress, StringFormat='Pickup: {0}'}"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding IncomingRide.DropoffAddress, StringFormat='Dropoff: {0}'}"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding IncomingRide.Fare.Amount, StringFormat='Fare: ${0:F2}'}"/>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="{StaticResource GapSm}">
+                                <Button Grid.Column="0"
+                                        Text="Decline"
+                                        Command="{Binding DeclineCommand}"
+                                        BackgroundColor="#F3F4F6"
+                                        TextColor="{StaticResource OnSurface}"/>
+                                <Button Grid.Column="1"
+                                        Text="Accept"
+                                        Command="{Binding AcceptRideCommand}"
+                                        BackgroundColor="{StaticResource Accent}"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
         </Border>
     </Grid>
 </ContentPage>

@@ -2,32 +2,66 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="True"
              x:Class="UberClone.Mobile.Views.RoleSelectPage"
              x:DataType="vm:RoleSelectViewModel"
              Title="{Binding Title}">
-    <Grid Padding="24" RowDefinitions="Auto,*,Auto">
-        <Label Grid.Row="0" Text="{Binding Greeting}" FontSize="22" FontAttributes="Bold" Margin="0,40,0,0"/>
 
-        <VerticalStackLayout Grid.Row="1" Spacing="16" VerticalOptions="Center">
-            <Border StrokeThickness="1" Stroke="#E5E7EB" StrokeShape="RoundRectangle 16" Padding="20">
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="🚗 Ride" FontSize="22" FontAttributes="Bold"/>
-                    <Label Text="Get a ride from your current location to anywhere." TextColor="{StaticResource Muted}"/>
-                    <Button Text="Ride mode" Command="{Binding RideCommand}" Margin="0,8,0,0"/>
-                </VerticalStackLayout>
-            </Border>
+    <ScrollView>
+        <Grid Padding="{StaticResource PagePaddingHorizontal},0"
+              RowDefinitions="Auto,*,Auto"
+              MinimumHeightRequest="{OnIdiom Default=600, Phone=560}">
 
-            <Border StrokeThickness="1" Stroke="#E5E7EB" StrokeShape="RoundRectangle 16" Padding="20">
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="🛞 Drive" FontSize="22" FontAttributes="Bold"/>
-                    <Label Text="Go online to start receiving trip requests." TextColor="{StaticResource Muted}"/>
-                    <Button Text="Drive mode" Command="{Binding DriveCommand}" Margin="0,8,0,0"
-                            BackgroundColor="{StaticResource Accent}"/>
-                </VerticalStackLayout>
-            </Border>
-        </VerticalStackLayout>
+            <Label Grid.Row="0"
+                   Text="{Binding Greeting}"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   Margin="0,32,0,16"
+                   LineBreakMode="WordWrap"
+                   MaximumWidthRequest="{StaticResource FormMaxWidth}"
+                   HorizontalOptions="Center"/>
 
-        <Button Grid.Row="2" Text="Sign out" Command="{Binding LogoutCommand}"
-                BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
-    </Grid>
+            <VerticalStackLayout Grid.Row="1"
+                                 Style="{StaticResource FormContainer}"
+                                 VerticalOptions="Center">
+
+                <Border StrokeThickness="1" Stroke="{StaticResource Hairline}"
+                        StrokeShape="RoundRectangle 16" Padding="20">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="🚗 Ride" FontSize="22" FontAttributes="Bold"/>
+                        <Label Text="Get a ride from your current location to anywhere."
+                               TextColor="{StaticResource Muted}"
+                               LineBreakMode="WordWrap"/>
+                        <Button Text="Ride mode"
+                                Command="{Binding RideCommand}"
+                                Margin="0,8,0,0"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeThickness="1" Stroke="{StaticResource Hairline}"
+                        StrokeShape="RoundRectangle 16" Padding="20">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="🛞 Drive" FontSize="22" FontAttributes="Bold"/>
+                        <Label Text="Go online to start receiving trip requests."
+                               TextColor="{StaticResource Muted}"
+                               LineBreakMode="WordWrap"/>
+                        <Button Text="Drive mode"
+                                Command="{Binding DriveCommand}"
+                                Margin="0,8,0,0"
+                                BackgroundColor="{StaticResource Accent}"/>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <Button Grid.Row="2"
+                    Text="Sign out"
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Muted}"
+                    Margin="0,16,0,16"
+                    MaximumWidthRequest="{StaticResource FormMaxWidth}"
+                    HorizontalOptions="Center"/>
+        </Grid>
+    </ScrollView>
 </ContentPage>

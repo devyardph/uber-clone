@@ -3,23 +3,49 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
              xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="False"
              x:Class="UberClone.Mobile.Views.RideTrackingPage"
              x:DataType="vm:RideTrackingViewModel"
              Title="{Binding Title}">
     <Grid RowDefinitions="*,Auto">
         <maps:GoogleMap Grid.Row="0"
+                        Grid.RowSpan="2"
                         Center="{Binding DriverLocation}"
                         Zoom="15"/>
 
-        <Border Grid.Row="1" Padding="20" BackgroundColor="{StaticResource Surface}">
-            <VerticalStackLayout Spacing="8">
-                <Label Text="{Binding StatusText}" FontSize="20" FontAttributes="Bold"/>
-                <Label Text="{Binding Ride.PickupAddress, StringFormat='Pickup: {0}'}" TextColor="{StaticResource Muted}"/>
-                <Label Text="{Binding Ride.DropoffAddress, StringFormat='Dropoff: {0}'}" TextColor="{StaticResource Muted}"/>
-                <Label Text="{Binding Ride.Fare.Amount, StringFormat='Fare: ${0:F2}'}"/>
-                <Button Text="Cancel ride" Command="{Binding CancelCommand}"
-                        BackgroundColor="#FEF2F2" TextColor="#B91C1C"/>
-            </VerticalStackLayout>
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource Surface}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20,20,0,0"
+                MaximumHeightRequest="{OnIdiom Default=420, Phone=380, Tablet=480}">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.15" Radius="12" Offset="0,-3"/>
+            </Border.Shadow>
+
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Style="{StaticResource FormContainer}"
+                                     Spacing="{StaticResource GapSm}"
+                                     Padding="{StaticResource PagePaddingHorizontal},16,{StaticResource PagePaddingHorizontal},{OnPlatform Default=16, iOS=28, Android=16}">
+
+                    <BoxView Color="{StaticResource Hairline}"
+                             HeightRequest="4" WidthRequest="40"
+                             CornerRadius="2"
+                             HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding StatusText}" FontSize="20" FontAttributes="Bold"/>
+                    <Label Text="{Binding Ride.PickupAddress, StringFormat='Pickup: {0}'}"
+                           TextColor="{StaticResource Muted}" LineBreakMode="TailTruncation"/>
+                    <Label Text="{Binding Ride.DropoffAddress, StringFormat='Dropoff: {0}'}"
+                           TextColor="{StaticResource Muted}" LineBreakMode="TailTruncation"/>
+                    <Label Text="{Binding Ride.Fare.Amount, StringFormat='Fare: ${0:F2}'}"/>
+
+                    <Button Text="Cancel ride"
+                            Command="{Binding CancelCommand}"
+                            BackgroundColor="#FEF2F2"
+                            TextColor="#B91C1C"/>
+                </VerticalStackLayout>
+            </ScrollView>
         </Border>
     </Grid>
 </ContentPage>

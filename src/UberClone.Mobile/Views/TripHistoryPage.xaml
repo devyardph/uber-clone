@@ -2,31 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="True"
              x:Class="UberClone.Mobile.Views.TripHistoryPage"
              x:DataType="vm:TripHistoryViewModel"
              Title="{Binding Title}">
-    <CollectionView ItemsSource="{Binding Trips}" Margin="16">
-        <CollectionView.EmptyView>
-            <Label Text="No trips yet" HorizontalOptions="Center" VerticalOptions="Center"
-                   TextColor="{StaticResource Muted}"/>
-        </CollectionView.EmptyView>
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <Border Padding="14" Margin="0,0,0,10" StrokeShape="RoundRectangle 12"
-                        Stroke="#E5E7EB" StrokeThickness="1">
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding CompletedAtUtc, StringFormat='{0:MMM d, h:mm tt}'}"
-                               FontAttributes="Bold"/>
-                        <Label Text="{Binding PickupAddress, StringFormat='From: {0}'}" TextColor="{StaticResource Muted}"/>
-                        <Label Text="{Binding DropoffAddress, StringFormat='To: {0}'}" TextColor="{StaticResource Muted}"/>
-                        <HorizontalStackLayout Spacing="12">
-                            <Label Text="{Binding Amount, StringFormat='${0:F2}'}" FontAttributes="Bold"/>
-                            <Label Text="{Binding DistanceKm, StringFormat='{0:F1} km'}" TextColor="{StaticResource Muted}"/>
-                            <Label Text="{Binding DurationMinutes, StringFormat='{0} min'}" TextColor="{StaticResource Muted}"/>
-                        </HorizontalStackLayout>
-                    </VerticalStackLayout>
-                </Border>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+
+    <Grid Padding="{StaticResource PagePaddingHorizontal},0">
+        <CollectionView ItemsSource="{Binding Trips}"
+                        MaximumWidthRequest="{StaticResource FormMaxWidth}"
+                        HorizontalOptions="Center">
+            <CollectionView.EmptyView>
+                <Label Text="No trips yet"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,40,0,0"
+                       TextColor="{StaticResource Muted}"/>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="14"
+                            Margin="0,0,0,10"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource Hairline}"
+                            StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding CompletedAtUtc, StringFormat='{0:MMM d, h:mm tt}'}"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding PickupAddress, StringFormat='From: {0}'}"
+                                   TextColor="{StaticResource Muted}"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding DropoffAddress, StringFormat='To: {0}'}"
+                                   TextColor="{StaticResource Muted}"
+                                   LineBreakMode="TailTruncation"/>
+                            <FlexLayout Wrap="Wrap" Direction="Row" JustifyContent="Start" AlignItems="Center"
+                                        Margin="0,4,0,0">
+                                <Label Text="{Binding Amount, StringFormat='${0:F2}'}"
+                                       FontAttributes="Bold"
+                                       Margin="0,0,12,0"/>
+                                <Label Text="{Binding DistanceKm, StringFormat='{0:F1} km'}"
+                                       TextColor="{StaticResource Muted}"
+                                       Margin="0,0,12,0"/>
+                                <Label Text="{Binding DurationMinutes, StringFormat='{0} min'}"
+                                       TextColor="{StaticResource Muted}"/>
+                            </FlexLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

@@ -3,63 +3,102 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
              xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="False"
+             Shell.NavBarIsVisible="False"
              x:Class="UberClone.Mobile.Views.RiderHomePage"
              x:DataType="vm:RiderHomeViewModel"
              Title="{Binding Title}">
+
+    <!-- Map fills the whole page (it draws under the status bar / notch for an
+         immersive look). The rounded bottom sheet sits on top with its own
+         safe-area padding so it never collides with the home indicator. -->
     <Grid RowDefinitions="*,Auto">
+
         <maps:GoogleMap Grid.Row="0"
-                        x:Name="Map"
+                        Grid.RowSpan="2"
                         Center="{Binding PickupLocation}"
                         Zoom="14"/>
 
-        <Border Grid.Row="1" StrokeThickness="0" BackgroundColor="{StaticResource Surface}"
-                Padding="20" Margin="0">
-            <VerticalStackLayout Spacing="12">
-                <Entry Text="{Binding PickupAddress}" Placeholder="Pickup"/>
-                <Entry Text="{Binding DropoffAddress}" Placeholder="Where to?"/>
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource Surface}"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20,20,0,0"
+                MaximumHeightRequest="{OnIdiom Default=560, Phone=520, Tablet=640}">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.15" Radius="12" Offset="0,-3"/>
+            </Border.Shadow>
 
-                <CollectionView ItemsSource="{Binding AvailableTypes}"
-                                SelectionMode="Single"
-                                SelectedItem="{Binding SelectedRideType}"
-                                HeightRequest="60">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Border Padding="14,8" StrokeShape="RoundRectangle 20"
-                                    Stroke="#E5E7EB">
-                                <Label Text="{Binding}" VerticalOptions="Center"/>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+            <!-- ScrollView lets the form scroll on very short devices (iPhone SE,
+                 small Android phones) without compressing the map. -->
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Style="{StaticResource FormContainer}"
+                                     Spacing="{StaticResource GapMd}"
+                                     Padding="{StaticResource PagePaddingHorizontal},16,{StaticResource PagePaddingHorizontal},{OnPlatform Default=16, iOS=28, Android=16}">
 
-                <Label IsVisible="{Binding Estimate, Converter={StaticResource NotNull}}">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Estimated fare: "/>
-                            <Span Text="{Binding Estimate.Amount, StringFormat='${0:F2}'}" FontAttributes="Bold"/>
-                            <Span Text="  ETA "/>
-                            <Span Text="{Binding Estimate.EtaMinutes}" FontAttributes="Bold"/>
-                            <Span Text=" min"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                    <!-- Drag handle for that bottom-sheet look -->
+                    <BoxView Color="{StaticResource Hairline}"
+                             HeightRequest="4"
+                             WidthRequest="40"
+                             CornerRadius="2"
+                             HorizontalOptions="Center"/>
 
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                    <Button Text="Estimate" Command="{Binding EstimateCommand}" Grid.Column="0"
-                            BackgroundColor="#F3F4F6" TextColor="{StaticResource OnSurface}"/>
-                    <Button Text="Confirm ride" Command="{Binding ConfirmCommand}" Grid.Column="1"/>
-                </Grid>
+                    <Entry Text="{Binding PickupAddress}" Placeholder="Pickup"/>
+                    <Entry Text="{Binding DropoffAddress}" Placeholder="Where to?"/>
 
-                <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
-                    <Button Text="History" Command="{Binding GoToHistoryCommand}"
-                            BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
-                    <Button Text="Payments" Command="{Binding GoToPaymentsCommand}"
-                            BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+                    <CollectionView ItemsSource="{Binding AvailableTypes}"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedRideType}"
+                                    HeightRequest="56">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="14,8"
+                                        StrokeShape="RoundRectangle 20"
+                                        Stroke="{StaticResource Hairline}">
+                                    <Label Text="{Binding}" VerticalOptions="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label IsVisible="{Binding Estimate, Converter={StaticResource NotNull}}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Estimated fare: "/>
+                                <Span Text="{Binding Estimate.Amount, StringFormat='${0:F2}'}" FontAttributes="Bold"/>
+                                <Span Text="  ETA "/>
+                                <Span Text="{Binding Estimate.EtaMinutes}" FontAttributes="Bold"/>
+                                <Span Text=" min"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="{StaticResource GapSm}">
+                        <Button Text="Estimate"
+                                Command="{Binding EstimateCommand}"
+                                Grid.Column="0"
+                                BackgroundColor="#F3F4F6"
+                                TextColor="{StaticResource OnSurface}"/>
+                        <Button Text="Confirm ride"
+                                Command="{Binding ConfirmCommand}"
+                                Grid.Column="1"/>
+                    </Grid>
+
+                    <HorizontalStackLayout Spacing="{StaticResource GapMd}" HorizontalOptions="Center">
+                        <Button Text="History"
+                                Command="{Binding GoToHistoryCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource Muted}"/>
+                        <Button Text="Payments"
+                                Command="{Binding GoToPaymentsCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource Muted}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
         </Border>
     </Grid>
 </ContentPage>
