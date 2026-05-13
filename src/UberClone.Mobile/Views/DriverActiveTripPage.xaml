@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             x:Class="UberClone.Mobile.Views.DriverActiveTripPage"
+             x:DataType="vm:DriverActiveTripViewModel"
+             Title="{Binding Title}">
+    <Grid RowDefinitions="*,Auto">
+        <maps:GoogleMap Grid.Row="0"
+                        Center="{Binding Ride.Pickup}"
+                        Zoom="15"/>
+
+        <Border Grid.Row="1" Padding="20" BackgroundColor="{StaticResource Surface}">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="{Binding Ride.PickupAddress, StringFormat='Pickup: {0}'}"/>
+                <Label Text="{Binding Ride.DropoffAddress, StringFormat='Dropoff: {0}'}"/>
+                <Label Text="{Binding Ride.Fare.Amount, StringFormat='Fare: ${0:F2}'}" FontAttributes="Bold"/>
+                <Button Text="{Binding NextActionLabel}" Command="{Binding AdvanceCommand}"/>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

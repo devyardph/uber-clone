@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             x:Class="UberClone.Mobile.Views.RideTrackingPage"
+             x:DataType="vm:RideTrackingViewModel"
+             Title="{Binding Title}">
+    <Grid RowDefinitions="*,Auto">
+        <maps:GoogleMap Grid.Row="0"
+                        Center="{Binding DriverLocation}"
+                        Zoom="15"/>
+
+        <Border Grid.Row="1" Padding="20" BackgroundColor="{StaticResource Surface}">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="{Binding StatusText}" FontSize="20" FontAttributes="Bold"/>
+                <Label Text="{Binding Ride.PickupAddress, StringFormat='Pickup: {0}'}" TextColor="{StaticResource Muted}"/>
+                <Label Text="{Binding Ride.DropoffAddress, StringFormat='Dropoff: {0}'}" TextColor="{StaticResource Muted}"/>
+                <Label Text="{Binding Ride.Fare.Amount, StringFormat='Fare: ${0:F2}'}"/>
+                <Button Text="Cancel ride" Command="{Binding CancelCommand}"
+                        BackgroundColor="#FEF2F2" TextColor="#B91C1C"/>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

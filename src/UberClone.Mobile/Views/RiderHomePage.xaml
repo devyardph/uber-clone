@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             xmlns:maps="clr-namespace:UberClone.Mobile.Maps"
+             x:Class="UberClone.Mobile.Views.RiderHomePage"
+             x:DataType="vm:RiderHomeViewModel"
+             Title="{Binding Title}">
+    <Grid RowDefinitions="*,Auto">
+        <maps:GoogleMap Grid.Row="0"
+                        x:Name="Map"
+                        Center="{Binding PickupLocation}"
+                        Zoom="14"/>
+
+        <Border Grid.Row="1" StrokeThickness="0" BackgroundColor="{StaticResource Surface}"
+                Padding="20" Margin="0">
+            <VerticalStackLayout Spacing="12">
+                <Entry Text="{Binding PickupAddress}" Placeholder="Pickup"/>
+                <Entry Text="{Binding DropoffAddress}" Placeholder="Where to?"/>
+
+                <CollectionView ItemsSource="{Binding AvailableTypes}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedRideType}"
+                                HeightRequest="60">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="14,8" StrokeShape="RoundRectangle 20"
+                                    Stroke="#E5E7EB">
+                                <Label Text="{Binding}" VerticalOptions="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label IsVisible="{Binding Estimate, Converter={StaticResource NotNull}}">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Estimated fare: "/>
+                            <Span Text="{Binding Estimate.Amount, StringFormat='${0:F2}'}" FontAttributes="Bold"/>
+                            <Span Text="  ETA "/>
+                            <Span Text="{Binding Estimate.EtaMinutes}" FontAttributes="Bold"/>
+                            <Span Text=" min"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <Button Text="Estimate" Command="{Binding EstimateCommand}" Grid.Column="0"
+                            BackgroundColor="#F3F4F6" TextColor="{StaticResource OnSurface}"/>
+                    <Button Text="Confirm ride" Command="{Binding ConfirmCommand}" Grid.Column="1"/>
+                </Grid>
+
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                    <Button Text="History" Command="{Binding GoToHistoryCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
+                    <Button Text="Payments" Command="{Binding GoToPaymentsCommand}"
+                            BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

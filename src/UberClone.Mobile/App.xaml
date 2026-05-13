@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:UberClone.Mobile.Converters"
+             x:Class="UberClone.Mobile.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <conv:InverseBoolConverter x:Key="Inverse"/>
+            <conv:NotNullConverter x:Key="NotNull"/>
+            <conv:StringNotEmptyConverter x:Key="StringNotEmpty"/>
+            <conv:OnlineLabelConverter x:Key="OnlineLabel"/>
+
+            <Color x:Key="Primary">#111111</Color>
+            <Color x:Key="Accent">#00C16A</Color>
+            <Color x:Key="OnPrimary">#FFFFFF</Color>
+            <Color x:Key="Surface">#FFFFFF</Color>
+            <Color x:Key="OnSurface">#111111</Color>
+            <Color x:Key="Muted">#6B7280</Color>
+
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="TextColor" Value="{StaticResource OnPrimary}" />
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="HeightRequest" Value="52" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="#F3F4F6" />
+                <Setter Property="HeightRequest" Value="48" />
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource OnSurface}" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

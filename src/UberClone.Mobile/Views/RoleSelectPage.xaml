@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:UberClone.Mobile.ViewModels"
+             x:Class="UberClone.Mobile.Views.RoleSelectPage"
+             x:DataType="vm:RoleSelectViewModel"
+             Title="{Binding Title}">
+    <Grid Padding="24" RowDefinitions="Auto,*,Auto">
+        <Label Grid.Row="0" Text="{Binding Greeting}" FontSize="22" FontAttributes="Bold" Margin="0,40,0,0"/>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="16" VerticalOptions="Center">
+            <Border StrokeThickness="1" Stroke="#E5E7EB" StrokeShape="RoundRectangle 16" Padding="20">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🚗 Ride" FontSize="22" FontAttributes="Bold"/>
+                    <Label Text="Get a ride from your current location to anywhere." TextColor="{StaticResource Muted}"/>
+                    <Button Text="Ride mode" Command="{Binding RideCommand}" Margin="0,8,0,0"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border StrokeThickness="1" Stroke="#E5E7EB" StrokeShape="RoundRectangle 16" Padding="20">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🛞 Drive" FontSize="22" FontAttributes="Bold"/>
+                    <Label Text="Go online to start receiving trip requests." TextColor="{StaticResource Muted}"/>
+                    <Button Text="Drive mode" Command="{Binding DriveCommand}" Margin="0,8,0,0"
+                            BackgroundColor="{StaticResource Accent}"/>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+
+        <Button Grid.Row="2" Text="Sign out" Command="{Binding LogoutCommand}"
+                BackgroundColor="Transparent" TextColor="{StaticResource Muted}"/>
+    </Grid>
+</ContentPage>
